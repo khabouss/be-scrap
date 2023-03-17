@@ -3,6 +3,9 @@ import requests
 from colorama import Fore
 import sys
 import os
+from dotenv import load_dotenv
+
+load_dotenv()
 
 REDIS_URL   = os.getenv("REDIS_URL")
 REDIS_PORT  = os.getenv("REDIS_PORT")

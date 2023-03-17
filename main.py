@@ -1,19 +1,25 @@
 from redis import Redis
 from colorama import Fore
 from bs4 import BeautifulSoup
-from helpers import REDIS_PORT
-from helpers import REDIS_URL
-from helpers import REDIS_DB
-from helpers import REDIS_QUEUE
-from helpers import get_content
-from helpers import site_maps
+from helpers import REDIS_PORT,REDIS_URL,REDIS_DB,REDIS_QUEUE,get_content,site_maps,update_ui
 import json
 import time
-from helpers import update_ui
 
 client = Redis(REDIS_URL, REDIS_PORT, REDIS_DB)
 
-
+def push_site_maps():
+    prog = 0
+    for site_map in site_maps:
+        with open(site_map, "r") as f:
+            data = f.read()
+            f.close()
+            soup = BeautifulSoup(data, "lxml")
+            url_tag = soup.find("urlset").find_all("url")
+            for url in url_tag:
+                page = url.find("loc").text
+                client.rpush(REDIS_QUEUE, page)
+                update_ui(prog)
+                prog += 1
 
 def main():
     prog = 0
@@ -41,6 +47,6 @@ def main():
                 update_ui(prog)
     print(Fore.YELLOW + "-- THE END --" + Fore.RESET)
 
-
 if __name__ == "__main__":
-    main()
+    push_site_maps()
+    print(client.lrange(REDIS_QUEUE, 0, -1))
