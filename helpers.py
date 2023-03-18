@@ -3,6 +3,7 @@ import requests
 from colorama import Fore
 import sys
 import os
+from redis import Redis
 from dotenv import load_dotenv
 
 load_dotenv()
@@ -11,6 +12,8 @@ REDIS_URL   = os.getenv("REDIS_URL")
 REDIS_PORT  = os.getenv("REDIS_PORT")
 REDIS_DB    = os.getenv("REDIS_DB")
 REDIS_QUEUE = os.getenv("REDIS_QUEUE")
+
+client = Redis(REDIS_URL, REDIS_PORT, REDIS_DB)
 
 headers = {
     "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/107.0.0.0 Safari/537.36"
@@ -78,6 +81,8 @@ site_maps = [
 def get_next():
     return random.randint(0, len(proxies))
 
+def get_pages(start, end):
+    return client.lrange(REDIS_QUEUE, start, end)
 
 def get_content(page):
     content = None
