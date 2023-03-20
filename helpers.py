@@ -24,7 +24,7 @@ proxies = ['69.30.240.226:15005', '69.30.197.122:15005', '173.208.239.10:15005',
            '195.154.255.118:15005', '195.154.222.228:15005', '195.154.255.34:15005', '195.154.222.26:15005', '195.154.255.118:15006', '195.154.222.228:15006', '195.154.255.34:15006', '195.154.222.26:15006', '195.154.255.118:15007', '195.154.222.228:15007', '195.154.255.34:15007', '195.154.222.26:15007', '195.154.255.118:15008', '195.154.222.228:15008', '195.154.255.34:15008', '195.154.222.26:15008']
 
 site_maps = [
-    #"data/sitemap.companies.be-en.1.xml",
+    "data/sitemap.companies.be-en.1.xml",
     "data/sitemap.companies.be-en.2.xml",
     "data/sitemap.companies.be-en.3.xml",
     "data/sitemap.companies.be-en.4.xml",
@@ -96,13 +96,16 @@ def get_content(page):
             time.sleep(1)
     return content
 
-def update_ui(current_prog):
+def update_ui(current_prog, color):
     """
         print the current progress to the terminal output
         :param current_prog: the current progress to print
         :type current_prog: number
     """
     sys.stdout.write("\r{0}>".format("="*2))
-    sys.stdout.write("\033[92m CURRENT PROGRESS: \033[0m")
+    if color == 'red':
+        sys.stdout.write("\033[91m f_CURRENT PROGRESS: \033[0m")
+    else:
+        sys.stdout.write("\033[92m CURRENT PROGRESS: \033[0m")
     sys.stdout.write(" "+str(current_prog))
     sys.stdout.flush()
