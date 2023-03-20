@@ -16,7 +16,7 @@ def main():
         w.writeheader()
         for page in pages:
             time.sleep(1)
-            content = get_content(page)
+            content = get_content(str(page))
             soup = BeautifulSoup(content.content, features="html.parser")
             next_data = soup.find("script", attrs={"id": "__NEXT_DATA__"})
             if next_data is None:

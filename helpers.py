@@ -5,6 +5,7 @@ import sys
 import os
 from redis import Redis
 from dotenv import load_dotenv
+import time
 
 load_dotenv()
 
@@ -13,7 +14,7 @@ REDIS_PORT  = os.getenv("REDIS_PORT")
 REDIS_DB    = os.getenv("REDIS_DB")
 REDIS_QUEUE = os.getenv("REDIS_QUEUE")
 
-client = Redis(REDIS_URL, REDIS_PORT, REDIS_DB)
+client = Redis(REDIS_URL, REDIS_PORT, REDIS_DB, charset="utf-8", decode_responses=True)
 
 headers = {
     "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/107.0.0.0 Safari/537.36"
@@ -79,7 +80,7 @@ site_maps = [
 
 
 def get_next():
-    return random.randint(0, len(proxies))
+    return random.randint(0, 31)
 
 def get_pages(start, end):
     return client.lrange(REDIS_QUEUE, start, end)
@@ -89,10 +90,11 @@ def get_content(page):
     while content is None:
         proxy_id = get_next()
         try:
-            # proxies={"http":proxies[proxy_id], "https":proxies[proxy_id]}
+            print(page)
             content = requests.get(page, proxies={"http":proxies[proxy_id], "https":proxies[proxy_id]},headers=headers)
         except:
-            print(Fore.BLUE + "Connection failed, changing proxy.." + Fore.RESET)
+            print(Fore.BLUE + "Connection failed, changing proxy.. "+ str(proxy_id) + Fore.RESET)
+            time.sleep(1)
     return content
 
 def update_ui(current_prog):
