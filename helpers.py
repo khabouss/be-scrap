@@ -24,7 +24,7 @@ proxies = ['69.30.240.226:15005', '69.30.197.122:15005', '173.208.239.10:15005',
            '195.154.255.118:15005', '195.154.222.228:15005', '195.154.255.34:15005', '195.154.222.26:15005', '195.154.255.118:15006', '195.154.222.228:15006', '195.154.255.34:15006', '195.154.222.26:15006', '195.154.255.118:15007', '195.154.222.228:15007', '195.154.255.34:15007', '195.154.222.26:15007', '195.154.255.118:15008', '195.154.222.228:15008', '195.154.255.34:15008', '195.154.222.26:15008']
 
 site_maps = [
-    "data/sitemap.companies.be-en.1.xml",
+    #"data/sitemap.companies.be-en.1.xml",
     "data/sitemap.companies.be-en.2.xml",
     "data/sitemap.companies.be-en.3.xml",
     "data/sitemap.companies.be-en.4.xml",
@@ -90,7 +90,6 @@ def get_content(page):
     while content is None:
         proxy_id = get_next()
         try:
-            print(page)
             content = requests.get(page, proxies={"http":proxies[proxy_id], "https":proxies[proxy_id]},headers=headers)
         except:
             print(Fore.BLUE + "Connection failed, changing proxy.. "+ str(proxy_id) + Fore.RESET)

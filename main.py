@@ -20,15 +20,18 @@ def main():
             soup = BeautifulSoup(content.content, features="html.parser")
             next_data = soup.find("script", attrs={"id": "__NEXT_DATA__"})
             if next_data is None:
+                print("Next_Data None: "+page)
                 continue
             loads = json.loads(next_data.text)
             info = {}
             info["company_website"] = loads['props']['pageProps']['companySubheader']['websiteUrl']
             info["company_id"] = loads['props']['pageProps']['companyAbout']['registrationNumber']
             if info["company_website"] is None or info["company_id"] is None:
+                print("info None: "+page)
                 continue
             w.writerow(info)
-            update_ui(prog)
+            print(info["company_id"])
+            #update_ui(prog)
             prog += 1
     print(Fore.YELLOW + "-- THE END --" + Fore.RESET)
 
