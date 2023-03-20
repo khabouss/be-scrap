@@ -16,19 +16,24 @@ def main():
         w.writeheader()
         for page in pages:
             time.sleep(1)
+            print(" ------------ getting request --------------")
             content = get_content(str(page))
+            print("request received")
             soup = BeautifulSoup(content.content, features="html.parser")
+            print("searching through data")
             next_data = soup.find("script", attrs={"id": "__NEXT_DATA__"})
             if next_data is None:
-                print("Next_Data None: "+page)
+                print(soup.find("body").prettify())
+                exit()
                 continue
             loads = json.loads(next_data.text)
             info = {}
             info["company_website"] = loads['props']['pageProps']['companySubheader']['websiteUrl']
-            info["company_id"] = loads['props']['pageProps']['companyAbout']['registrationNumber']
+            info["company_id"] = loads['props']['pageProps']['companyAbout']['registrationNumber'] 
             if info["company_website"] is None or info["company_id"] is None:
                 print("info None: "+page)
                 continue
+            print("data found")
             w.writerow(info)
             print(info["company_id"])
             #update_ui(prog)
