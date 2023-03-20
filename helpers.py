@@ -87,10 +87,10 @@ def get_pages(start, end):
 def get_content(page):
     content = None
     while content is None:
-        # proxy_id = get_next()
+        proxy_id = get_next()
         try:
             # proxies={"http":proxies[proxy_id], "https":proxies[proxy_id]}
-            content = requests.get(page, headers=headers)
+            content = requests.get(page, proxies={"http":proxies[proxy_id], "https":proxies[proxy_id]},headers=headers)
         except:
             print(Fore.BLUE + "Connection failed, changing proxy.." + Fore.RESET)
     return content
